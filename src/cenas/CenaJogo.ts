@@ -1,16 +1,25 @@
 import { Scene } from 'excalibur';
 import { Parede } from '../atores/Parede';
+import { Jogador } from '../atores/Jogador';
 import {
   LARGURA_JOGO as L,
   ALTURA_JOGO as A,
   ESPESSURA_PAREDE as E,
   TAMANHO_PORTA as P,
+  TAMANHO_JOGADOR,
+  ALTURA_JOGO,
+  LARGURA_JOGO,
 } from '../config';
+
+export const jogador = new Jogador(LARGURA_JOGO/2, ALTURA_JOGO/2, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
 
 export class CenaJogo extends Scene {
   onInitialize() {
     this.montarSala();
+    this.add(jogador);
   }
+
+
 
   private montarSala() {
     const portaX = (L - P) / 2; // aberturas de cima e de baixo
