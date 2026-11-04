@@ -1,6 +1,7 @@
 import { Scene } from 'excalibur';
 import { Parede } from '../atores/Parede';
 import { Jogador } from '../atores/Jogador';
+import { Robo } from '../atores/Robo';
 import {
   LARGURA_JOGO as L,
   ALTURA_JOGO as A,
@@ -16,10 +17,22 @@ export const jogador = new Jogador(LARGURA_JOGO/2, ALTURA_JOGO/2, TAMANHO_JOGADO
 export class CenaJogo extends Scene {
   onInitialize() {
     this.montarSala();
+    this.spawnarRobos();
     this.add(jogador);
   }
 
 
+  private spawnarRobos() {
+    const posicoes = [
+      { x: 80, y: 70},
+      { x: 240, y: 70},
+      { x: 160, y: 175},
+    ];
+
+    for (const posicao of posicoes) {
+      this.add(new Robo(posicao.x, posicao.y));
+    }
+  }
 
   private montarSala() {
     const portaX = (L - P) / 2; // aberturas de cima e de baixo
