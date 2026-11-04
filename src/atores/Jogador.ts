@@ -19,31 +19,26 @@ export class Jogador extends Actor {
         this.vel = vec(0,0);
 
         //--------Movimento no eixo x---------
-
         let direcao_x = 0;  
 
-        //-----Esquerda-----
         if(tecla.isHeld(Keys.A)) direcao_x -= 1;
         if(tecla.isHeld(Keys.ArrowLeft)) direcao_x -= 1;
 
-        //-----Direita-----
         if(tecla.isHeld(Keys.D)) direcao_x += 1;
         if(tecla.isHeld(Keys.ArrowRight)) direcao_x += 1;
 
         //--------Movimento no eixo y---------
-
         let direcao_y = 0;
-
-        //-----Cima-----
         if(tecla.isHeld(Keys.W)) direcao_y -= 1;
         if(tecla.isHeld(Keys.ArrowUp)) direcao_y -= 1;
 
-        //-----Baixo-----
         if(tecla.isHeld(Keys.S)) direcao_y += 1;
         if(tecla.isHeld(Keys.ArrowDown)) direcao_y += 1;
     
-        // Vetor de velocidade do jogador
+        // Vetor velocidade do jogador
         this.vel = vec(direcao_x, direcao_y).normalize().scale(VELOCIDADE_JOGADOR);
+
+        // if(tecla.isHeld(Keys.Space)) Atirar();
     }
 }
 
