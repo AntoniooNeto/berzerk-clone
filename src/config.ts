@@ -35,6 +35,8 @@ export const CORES = {
   parede: Color.Gray,
   otto: Color.Magenta,
   fundo: Color.fromHex('#111111'),
+  hud: Color.Black,    // texto sobre a parede cinza
+  texto: Color.White,  // texto sobre o fundo escuro
 };
 
 // ---------- Grupos de colisão ----------

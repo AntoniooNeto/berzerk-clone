@@ -2,6 +2,7 @@ import { Scene } from 'excalibur';
 import { Parede } from '../atores/Parede';
 import { Jogador } from '../atores/Jogador';
 import { Robo } from '../atores/Robo';
+import { Placar, Vidas } from '../atores/Hud';
 import {
   LARGURA_JOGO as L,
   ALTURA_JOGO as A,
@@ -19,6 +20,8 @@ export class CenaJogo extends Scene {
     this.montarSala();
     this.spawnarRobos();
     this.add(jogador);
+    this.add(new Placar());
+    this.add(new Vidas());
   }
 
 
