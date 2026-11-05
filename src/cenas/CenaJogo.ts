@@ -30,7 +30,7 @@ export class CenaJogo extends Scene {
     ];
 
     for (const posicao of posicoes) {
-      this.add(new Robo(posicao.x, posicao.y));
+      this.add(new Robo(posicao.x, posicao.y, jogador));
     }
   }
 
