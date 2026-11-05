@@ -5,6 +5,10 @@ export const LARGURA_JOGO = 320;
 export const ALTURA_JOGO = 240;
 export const TAMANHO_TILE = 16;
 
+// ---------- Regras ----------
+export const VIDAS_INICIAIS = 3;
+export const PONTOS_ROBO = 50;
+
 // ---------- Sala ----------
 export const ESPESSURA_PAREDE = TAMANHO_TILE;
 export const TAMANHO_PORTA = TAMANHO_TILE * 2; // largura das aberturas
