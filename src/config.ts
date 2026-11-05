@@ -13,7 +13,8 @@ export const TAMANHO_PORTA = TAMANHO_TILE * 2; // largura das aberturas
 export const TAMANHO_JOGADOR = 12;
 export const TAMANHO_ROBO = 12;
 export const TAMANHO_BALA = 4;
-export const DISTANCIA_BALA = 9;
+export const DISTANCIA_BALA = 6;
+export const RECARGA_BALA = 500;
 
 // ---------- Velocidades (pixels por segundo) ----------
 export const VELOCIDADE_JOGADOR = 80;

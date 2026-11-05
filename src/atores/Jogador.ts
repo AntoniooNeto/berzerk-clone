@@ -1,10 +1,11 @@
 import { Actor, CollisionType, Engine, vec, Keys, Vector } from 'excalibur';
-import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA } from '../config';
-import { Bala } from './Bala';
+import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA } from '../config';
+import { Bala, perdida } from './Bala';
 
 export class Jogador extends Actor {
     // pra onde ta virado
     private direcao: Vector = vec(1, 0);
+    private esperar = 0; 
 
     constructor(x: number, y: number, largura: number, altura: number){
         super({
@@ -19,9 +20,9 @@ export class Jogador extends Actor {
     }
 
     //===============Movimento do jogador=================
-    onPreUpdate(engine: Engine, _delta: number): void {
+    onPreUpdate(engine: Engine, delta: number): void {
         const tecla = engine.input.keyboard;
-        this.vel = vec(0,0);
+        this.esperar -= delta;   
 
         //--------Movimento no eixo x---------
         let direcao_x = 0;  
@@ -50,9 +51,14 @@ export class Jogador extends Actor {
             this.vel = vec(0, 0);
         }                 
 
+        //==================Tiro==================
         
-        if(tecla.isHeld(Keys.Space)) this.atirar();
-        
+        const atirando = engine.input.keyboard.isHeld(Keys.Space);
+
+        if (atirando && this.esperar <= 0 && perdida === false) {      
+            this.atirar();
+            this.esperar = RECARGA_BALA;          
+        }
     }
 
     atirar(): void {
