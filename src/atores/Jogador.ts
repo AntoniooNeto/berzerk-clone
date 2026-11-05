@@ -1,7 +1,11 @@
-import { Actor, CollisionType, Engine, vec, Keys } from 'excalibur';
-import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR } from '../config';
+import { Actor, CollisionType, Engine, vec, Keys, Vector } from 'excalibur';
+import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA } from '../config';
+import { Bala } from './Bala';
 
 export class Jogador extends Actor {
+    // pra onde ta virado
+    private direcao: Vector = vec(1, 0);
+
     constructor(x: number, y: number, largura: number, altura: number){
         super({
             pos: vec(x, y),
@@ -13,6 +17,7 @@ export class Jogador extends Actor {
             collisionGroup: GruposDeColisao.Jogador,
         });
     }
+
     //===============Movimento do jogador=================
     onPreUpdate(engine: Engine, _delta: number): void {
         const tecla = engine.input.keyboard;
@@ -35,10 +40,26 @@ export class Jogador extends Actor {
         if(tecla.isHeld(Keys.S)) direcao_y += 1;
         if(tecla.isHeld(Keys.ArrowDown)) direcao_y += 1;
     
-        // Vetor velocidade do jogador
-        this.vel = vec(direcao_x, direcao_y).normalize().scale(VELOCIDADE_JOGADOR);
+        let dir = vec(direcao_x, direcao_y);
 
-        // if(tecla.isHeld(Keys.Space)) Atirar();
+        // vai se mexer ou nao
+        if (dir.x !== 0 || dir.y !== 0) {
+            this.direcao = dir.normalize();            
+            this.vel = this.direcao.scale(VELOCIDADE_JOGADOR);     
+        } else {
+            this.vel = vec(0, 0);
+        }                 
+
+        
+        if(tecla.isHeld(Keys.Space)) this.atirar();
+        
     }
+
+    atirar(): void {
+        const saida = this.pos.add(this.direcao.scale(DISTANCIA_BALA));
+        const bala = new Bala(saida, 'Jogador', this.direcao);
+        this.scene?.add(bala);
+    }
+   
 }
 
