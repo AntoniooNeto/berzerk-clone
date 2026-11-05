@@ -4,7 +4,7 @@ import { Bala } from './Bala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Robo extends Actor {
-    private alvo:Actor;
+    private alvo: Actor;
 
     constructor(x: number, y: number, alvo: Actor) {
         super({
@@ -26,7 +26,7 @@ export class Robo extends Actor {
     }
 
     onCollisionStart(_self: Collider, other: Collider, _side: Side, _contact: CollisionContact): void {
-        if (other.owner instaceof Bala) {
+        if (other.owner instanceof Bala) {
             this.morrer();
         }
     }
