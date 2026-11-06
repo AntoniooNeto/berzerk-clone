@@ -1,5 +1,5 @@
 import { Color, Engine, Font, Label, vec } from 'excalibur';
-import { CORES, TAMANHO_TILE } from '../config';
+import { CORES, ALTURA_JOGO, ESPESSURA_PAREDE, TAMANHO_TILE } from '../config';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 function criarFonte(cor: Color) {
@@ -41,5 +41,21 @@ export class Vidas extends Label {
     if (estadoJogo.fimDeJogo) {
       engine.goToScene('gameover');
     }
+  }
+}
+
+export class NumeroSala extends Label {
+  constructor() {
+    super({
+      text: 'SALA: 1',
+      pos: vec(TAMANHO_TILE + 4, ALTURA_JOGO - ESPESSURA_PAREDE + 3),
+      anchor: vec(0, 0),
+      font: criarFonte(CORES.hud),
+      z: 10,
+    });
+  }
+
+  onPreUpdate() {
+    this.text = `SALA: ${estadoJogo.sala}`;
   }
 }

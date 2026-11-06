@@ -4,6 +4,7 @@ export class EstadoJogo {
   pontos = 0;
   vidas = VIDAS_INICIAIS;
   fimDeJogo = false;
+  sala = 1;
 
   adicionarPontos(quantidade: number) {
     this.pontos += quantidade;
@@ -21,6 +22,7 @@ export class EstadoJogo {
   reiniciar() {
     this.pontos = 0;
     this.vidas = VIDAS_INICIAIS;
+    this.sala = 1;
     this.fimDeJogo = false;
   }
 }
