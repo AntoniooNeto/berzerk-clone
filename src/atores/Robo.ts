@@ -1,10 +1,12 @@
-import { Actor, CollisionType, Collider, CollisionContact, Engine, Side, vec } from 'excalibur';
-import { GruposDeColisao, CORES, TAMANHO_ROBO, VELOCIDADE_ROBO, PONTOS_ROBO } from '../config';
+import { Actor, CollisionType, Collider, CollisionContact, Engine, Side, Vector, vec } from 'excalibur';
+import { GruposDeColisao, CORES, TAMANHO_ROBO, VELOCIDADE_ROBO, PONTOS_ROBO, DISTANCIA_BALA, RECARGA_TIRO_ROBO } from '../config';
 import { Bala } from './Bala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Robo extends Actor {
     private alvo: Actor;
+
+    private cooldown = 1000 = Math.random() * 2000;
 
     constructor(x: number, y: number, alvo: Actor) {
         super({
@@ -23,6 +25,18 @@ export class Robo extends Actor {
         const ate = this.alvo.pos.sub(this.pos);
         
         this.vel = ate.normalize().scale(VELOCIDADE_ROBO);
+
+        this.cooldown -= delta;
+        if (this.cooldown <= 0) {
+            this.atirar(ate);
+            this.cooldown = RECARGA_TIRO_ROBO;
+        }
+    }
+
+    private atirar(direção: Vector): void {
+        const saida = this.pos.add(direcao.normalize().scale(DISTANCIA_BALA));
+        const bala = new Bala(saida, 'Robo', direcao);
+        this.scene?.add(bala);
     }
 
     onCollisionStart(_self: Collider, other: Collider, _side: Side, _contact: CollisionContact): void {
