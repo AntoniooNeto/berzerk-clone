@@ -11,6 +11,10 @@ export class EstadoJogo {
     this.pontos += quantidade;
   }
 
+  removerPontos(quantidade: number) {
+    this.pontos -= quantidade;
+  }
+
   perderVida() {
     if (this.fimDeJogo) return; // evita perder vida depois do game over
     this.vidas -= 1;

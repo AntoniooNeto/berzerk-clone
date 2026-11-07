@@ -1,5 +1,5 @@
 import { Actor, CollisionType, Collider, CollisionContact, Engine, Side, vec, Keys, Vector } from 'excalibur';
-import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA, X0_JOGADOR, Y0_JOGADOR } from '../config';
+import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA, X0_JOGADOR, Y0_JOGADOR, PONTOS_MORTE } from '../config';
 import { Bala, perdida } from './Bala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
@@ -62,6 +62,18 @@ export class Jogador extends Actor {
         }
 
     }
+
+    onCollisionStart(_self: Collider, other: Collider, _side: Side, _contact: CollisionContact): void {
+        if (other.owner instanceof Bala) {
+            this.morrer();
+        }
+    }
+
+    private morrer(): void {
+            estadoJogo.removerPontos(PONTOS_MORTE);
+            console.log('Você morreu! Pontos perdidos:', PONTOS_MORTE);
+            estadoJogo.perderVida();
+        }
 
     atirar(): void {
         const saida = this.pos.add(this.direcao.scale(DISTANCIA_BALA));
