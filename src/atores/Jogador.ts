@@ -1,12 +1,13 @@
 import { Actor, CollisionType, Collider, CollisionContact, Engine, Side, vec, Keys, Vector } from 'excalibur';
 import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA, X0_JOGADOR, Y0_JOGADOR, PONTOS_MORTE } from '../config';
-import { Bala, perdida } from './Bala';
+import { Bala } from './Bala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Jogador extends Actor {
     // pra onde ta virado
     private direcao: Vector = vec(1, 0);
     private esperar = 0; 
+    private balaAtual: Bala | null = null;
 
     constructor(x: number, y: number, largura: number, altura: number){
         super({
@@ -55,12 +56,12 @@ export class Jogador extends Actor {
         //==================Tiro==================
         
         const atirando = engine.input.keyboard.isHeld(Keys.Space);
+        const podeAtirar = this.balaAtual === null || this.balaAtual.isKilled();
 
-        if (atirando && this.esperar <= 0 && perdida === false) {      
+        if (atirando && this.esperar <= 0 && podeAtirar) {      
             this.atirar();
             this.esperar = RECARGA_BALA;          
         }
-
     }
 
     onCollisionStart(_self: Collider, other: Collider, _side: Side, _contact: CollisionContact): void {
@@ -73,11 +74,13 @@ export class Jogador extends Actor {
             estadoJogo.removerPontos(PONTOS_MORTE);
             console.log('Você morreu! Pontos perdidos:', PONTOS_MORTE);
             estadoJogo.perderVida();
+            this.balaAtual = null;
         }
 
     atirar(): void {
         const saida = this.pos.add(this.direcao.scale(DISTANCIA_BALA));
         const bala = new Bala(saida, 'Jogador', this.direcao);
+        this.balaAtual = bala;
         this.scene?.add(bala);
     }
 
@@ -85,6 +88,7 @@ export class Jogador extends Actor {
         this.pos = vec(X0_JOGADOR, Y0_JOGADOR);
         this.esperar = 0;
         this.direcao = vec(1, 0);
+        this.balaAtual = null;
     }
    
 }
