@@ -21,11 +21,13 @@ export const TAMANHO_ROBO = 12;
 export const TAMANHO_BALA = 4;
 export const DISTANCIA_BALA = 6;
 export const RECARGA_BALA = 500;
+export const RECARGA_TIRO_ROBO = 2500;
 
 // ---------- Velocidades (pixels por segundo) ----------
 export const VELOCIDADE_JOGADOR = 80;
 export const VELOCIDADE_ROBO = 30;
 export const VELOCIDADE_BALA = 200;
+export const VELOCIDADE_BALA_ROBO = 120;
 
 // ---------- Cores do protótipo ----------
 export const CORES = {

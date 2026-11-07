@@ -6,7 +6,7 @@ import { estadoJogo } from '../sistemas/EstadoJogo';
 export class Robo extends Actor {
     private alvo: Actor;
 
-    private cooldown = 1000 = Math.random() * 2000;
+    private cooldown = 1000 + Math.random() * 2000;
 
     constructor(x: number, y: number, alvo: Actor) {
         super({
@@ -21,7 +21,7 @@ export class Robo extends Actor {
         this.alvo = alvo;
     }
 
-    onPreUpdate(_engine: Engine, _delta: number): void {
+    onPreUpdate(_engine: Engine, delta: number): void {
         const ate = this.alvo.pos.sub(this.pos);
         
         this.vel = ate.normalize().scale(VELOCIDADE_ROBO);
@@ -33,7 +33,7 @@ export class Robo extends Actor {
         }
     }
 
-    private atirar(direção: Vector): void {
+    private atirar(direcao: Vector): void {
         const saida = this.pos.add(direcao.normalize().scale(DISTANCIA_BALA));
         const bala = new Bala(saida, 'Robo', direcao);
         this.scene?.add(bala);
