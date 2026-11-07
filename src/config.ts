@@ -44,6 +44,21 @@ export const CORES = {
   texto: Color.White,  // texto sobre o fundo escuro
 };
 
+export type TipoRobo = 'comum' | 'rapido';
+
+export interface DadosRobo {
+  cor: Color;
+  velocidade: number;
+  recargaTiro: number;
+  pontos: number;
+}
+
+export const TIPOS_ROBO: Record<TipoRobo, DadosRobo> = {
+  comum: {cor: CORES.robo, velocidade: VELOCIDADE_ROBO, recargaTiro: RECARGA_TIRO_ROBO, pontos: PONTOS_ROBO},
+  rapido: {cor: CORES.robo2, velocidade: 55, recargaTiro: 4000, pontos: 100},
+};
+
+export const CHANCE_ROBO_RAPIDO = 0.3;
 // ---------- Grupos de colisão ----------
 // ATENÇÃO: criar sempre nesta ordem. Cada grupo recebe um bit na ordem
 // de criação (jogador = 1, inimigo = 2, parede = 4, ...), e a máscara usa esses bits.

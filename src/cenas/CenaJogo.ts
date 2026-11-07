@@ -13,6 +13,8 @@ import {
   TAMANHO_JOGADOR,
   X0_JOGADOR,
   Y0_JOGADOR,
+  CHANCE_ROBO_RAPIDO,
+  type TipoRobo,
 } from '../config';
 
 export const jogador = new Jogador(X0_JOGADOR, Y0_JOGADOR, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
@@ -82,7 +84,8 @@ export class CenaJogo extends Scene {
 
   private spawnarRobos(posicoes: { x: number; y: number }[]) {
   for (const posicao of posicoes) {
-    this.add(new Robo(posicao.x, posicao.y, jogador));
+    const tipo: TipoRobo = Math.random() < CHANCE_ROBO_RAPIDO ? 'rapido' : 'comum';
+    this.add(new Robo(posicao.x, posicao.y, jogador, tipo));
   }
 }
 

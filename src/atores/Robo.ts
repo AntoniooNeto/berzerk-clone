@@ -1,35 +1,37 @@
 import { Actor, CollisionType, Collider, CollisionContact, Engine, Side, Vector, vec } from 'excalibur';
-import { GruposDeColisao, CORES, TAMANHO_ROBO, VELOCIDADE_ROBO, PONTOS_ROBO, DISTANCIA_BALA, RECARGA_TIRO_ROBO } from '../config';
+import { GruposDeColisao, TAMANHO_ROBO, DISTANCIA_BALA, TIPOS_ROBO, type TipoRobo, type DadosRobo } from '../config';
 import { Bala } from './Bala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Robo extends Actor {
     private alvo: Actor;
+    private dados: DadosRobo;
 
     private cooldown = 1000 + Math.random() * 2000;
 
-    constructor(x: number, y: number, alvo: Actor) {
+    constructor(x: number, y: number, alvo: Actor, tipo: TipoRobo) {
         super({
             pos: vec(x, y), 
             anchor: vec(0.5, 0.5),
             width: TAMANHO_ROBO,
             height: TAMANHO_ROBO,
-            color: CORES.robo,
+            color: TIPOS_ROBO[tipo].cor,
             collisionType: CollisionType.Active,
             collisionGroup: GruposDeColisao.Inimigo,
         });
         this.alvo = alvo;
+        this.dados = TIPOS_ROBO[tipo];
     }
 
     onPreUpdate(_engine: Engine, delta: number): void {
         const ate = this.alvo.pos.sub(this.pos);
         
-        this.vel = ate.normalize().scale(VELOCIDADE_ROBO);
+        this.vel = ate.normalize().scale(this.dados.velocidade);
 
         this.cooldown -= delta;
         if (this.cooldown <= 0) {
             this.atirar(ate);
-            this.cooldown = RECARGA_TIRO_ROBO;
+            this.cooldown = this.dados.recargaTiro;
         }
     }
 
@@ -46,7 +48,7 @@ export class Robo extends Actor {
     }
 
     private morrer(): void {
-        estadoJogo.adicionarPontos(PONTOS_ROBO);
+        estadoJogo.adicionarPontos(this.dados.pontos);
         console.log('Robô morto! Pontos ganhos:', estadoJogo.pontos);
         this.kill();
     }
