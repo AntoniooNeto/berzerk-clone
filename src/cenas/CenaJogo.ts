@@ -1,4 +1,4 @@
-import { Engine, Label, Scene, Transition, vec, type SceneActivationContext } from 'excalibur';
+import { Engine, Label, Scene, vec } from 'excalibur';
 import { Parede } from '../atores/Parede';
 import { Jogador } from '../atores/Jogador';
 import { Robo } from '../atores/Robo';
@@ -13,7 +13,6 @@ import {
   TAMANHO_JOGADOR,
   X0_JOGADOR,
   Y0_JOGADOR,
-  VIDAS_INICIAIS,
 } from '../config';
 
 export const jogador = new Jogador(X0_JOGADOR, Y0_JOGADOR, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
@@ -32,7 +31,7 @@ export class CenaJogo extends Scene {
     this.verificarSaida();
   }
 
-  onPreUpdate(engine: Engine, _elapsed: number): void {
+  onPreUpdate(_engine: Engine, _elapsed: number): void {
     if (estadoJogo.vidas < estadoJogo.vidasAntes) {
       jogador.reposicionarNaSala();
       estadoJogo.vidasAntes = estadoJogo.vidas;

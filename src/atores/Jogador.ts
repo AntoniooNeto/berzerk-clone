@@ -1,7 +1,6 @@
 import { Actor, CollisionType, Engine, vec, Keys, Vector } from 'excalibur';
 import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA, X0_JOGADOR, Y0_JOGADOR } from '../config';
 import { Bala, perdida } from './Bala';
-import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Jogador extends Actor {
     // pra onde ta virado
