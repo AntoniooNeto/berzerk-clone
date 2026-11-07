@@ -3,6 +3,7 @@ import { VIDAS_INICIAIS } from '../config';
 export class EstadoJogo {
   pontos = 0;
   vidas = VIDAS_INICIAIS;
+  vidasAntes = VIDAS_INICIAIS;
   fimDeJogo = false;
   sala = 1;
 
@@ -13,6 +14,7 @@ export class EstadoJogo {
   perderVida() {
     if (this.fimDeJogo) return; // evita perder vida depois do game over
     this.vidas -= 1;
+  
     if (this.vidas <= 0) {
       this.vidas = 0;
       this.fimDeJogo = true;
@@ -22,6 +24,7 @@ export class EstadoJogo {
   reiniciar() {
     this.pontos = 0;
     this.vidas = VIDAS_INICIAIS;
+    this.vidasAntes = VIDAS_INICIAIS;
     this.sala = 1;
     this.fimDeJogo = false;
   }

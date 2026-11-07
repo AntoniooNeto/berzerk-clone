@@ -1,6 +1,7 @@
 import { Actor, CollisionType, Engine, vec, Keys, Vector } from 'excalibur';
-import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA } from '../config';
+import { GruposDeColisao, CORES, VELOCIDADE_JOGADOR, DISTANCIA_BALA, RECARGA_BALA, X0_JOGADOR, Y0_JOGADOR } from '../config';
 import { Bala, perdida } from './Bala';
+import { estadoJogo } from '../sistemas/EstadoJogo';
 
 export class Jogador extends Actor {
     // pra onde ta virado
@@ -59,12 +60,19 @@ export class Jogador extends Actor {
             this.atirar();
             this.esperar = RECARGA_BALA;          
         }
+
     }
 
     atirar(): void {
         const saida = this.pos.add(this.direcao.scale(DISTANCIA_BALA));
         const bala = new Bala(saida, 'Jogador', this.direcao);
         this.scene?.add(bala);
+    }
+
+    reposicionarNaSala(): void {
+        this.pos = vec(X0_JOGADOR, Y0_JOGADOR);
+        this.esperar = 0;
+        this.direcao = vec(1, 0);
     }
    
 }

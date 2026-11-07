@@ -8,6 +8,8 @@ export const TAMANHO_TILE = 16;
 // ---------- Regras ----------
 export const VIDAS_INICIAIS = 3;
 export const PONTOS_ROBO = 50;
+export const X0_JOGADOR = LARGURA_JOGO/10;
+export const Y0_JOGADOR = ALTURA_JOGO/2;
 
 // ---------- Sala ----------
 export const ESPESSURA_PAREDE = TAMANHO_TILE;

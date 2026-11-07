@@ -45,5 +45,6 @@ export class CenaGameOver extends Scene {
     engine.removeScene('jogo');
     engine.addScene('jogo', new CenaJogo());
     engine.goToScene('jogo');
+    
   }
 }

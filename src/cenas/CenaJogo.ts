@@ -1,4 +1,4 @@
-import { Label, Scene, vec } from 'excalibur';
+import { Engine, Label, Scene, Transition, vec, type SceneActivationContext } from 'excalibur';
 import { Parede } from '../atores/Parede';
 import { Jogador } from '../atores/Jogador';
 import { Robo } from '../atores/Robo';
@@ -11,9 +11,12 @@ import {
   ESPESSURA_PAREDE as E,
   TAMANHO_PORTA as P,
   TAMANHO_JOGADOR,
+  X0_JOGADOR,
+  Y0_JOGADOR,
+  VIDAS_INICIAIS,
 } from '../config';
 
-export const jogador = new Jogador(L/2, A/2, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
+export const jogador = new Jogador(X0_JOGADOR, Y0_JOGADOR, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
 type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita'
 
 export class CenaJogo extends Scene {
@@ -27,6 +30,13 @@ export class CenaJogo extends Scene {
 
   onPostUpdate() {
     this.verificarSaida();
+  }
+
+  onPreUpdate(engine: Engine, _elapsed: number): void {
+    if (estadoJogo.vidas < estadoJogo.vidasAntes) {
+      jogador.reposicionarNaSala();
+      estadoJogo.vidasAntes = estadoJogo.vidas;
+    }
   }
 
   // Jogador passou da borda da tela = saiu por uma porta
