@@ -52,7 +52,7 @@ const BALA_INIMIGO = 0b10000;
 
 export const GruposDeColisao = {
   Jogador: CollisionGroupManager.create('jogador', INIMIGO | PAREDE | BALA_INIMIGO),
-  Inimigo: CollisionGroupManager.create('inimigo', JOGADOR | PAREDE | BALA_JOGADOR),
+  Inimigo: CollisionGroupManager.create('inimigo', JOGADOR | PAREDE | BALA_JOGADOR | INIMIGO),
   Parede: CollisionGroupManager.create('parede', JOGADOR | INIMIGO | BALA_JOGADOR | BALA_INIMIGO),
   BalaJogador: CollisionGroupManager.create('balaJogador', INIMIGO | PAREDE),
   BalaInimigo: CollisionGroupManager.create('balaInimigo', JOGADOR | PAREDE),
