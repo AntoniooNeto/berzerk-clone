@@ -1,7 +1,9 @@
 import { ImageSource } from 'excalibur';
 
+
+
 export const Recursos = {
-  Arqueiro: new ImageSource('./arqueiro.png'),
-  Rato: new ImageSource('./rato.png'),
-  Mago: new ImageSource('./ogro_mago.png'),
+  Arqueiro: new ImageSource('/assets/images/arqueiro.png'),
+  Rato: new ImageSource('/assets/images/rato.png'),
+  Mago: new ImageSource('/assets/images/ogro_mago.png'),
 };

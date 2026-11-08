@@ -21,6 +21,7 @@ type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita'
 export class CenaJogo extends Scene {
   onInitialize() {
     this.add(jogador);
+    jogador.reposicionarNaSala();
     this.add(new Placar());
     this.add(new Vidas());
     this.add(new NumeroSala())
