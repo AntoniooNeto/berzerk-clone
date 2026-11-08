@@ -9,6 +9,7 @@ export const TAMANHO_TILE = 16;
 export const VIDAS_INICIAIS = 3;
 export const PONTOS_ROBO = 50;
 export const PONTOS_MORTE = 50;
+export const BONUS_SALA_LIMPA = 100;
 export const X0_JOGADOR = LARGURA_JOGO/10;
 export const Y0_JOGADOR = ALTURA_JOGO/2;
 
@@ -39,6 +40,7 @@ export const CORES = {
   balaInimigo: Color.Yellow,
   parede: Color.Gray,
   otto: Color.Magenta,
+  bonus: Color.Yellow,
   fundo: Color.fromHex('#111111'),
   hud: Color.Black,    // texto sobre a parede cinza
   texto: Color.White,  // texto sobre o fundo escuro

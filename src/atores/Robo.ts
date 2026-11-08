@@ -54,6 +54,7 @@ export class Robo extends Actor {
 
     private morrer(): void {
         estadoJogo.adicionarPontos(this.dados.pontos);
+        estadoJogo.robosRestantes -= 1;
         console.log('Robô morto! Pontos ganhos:', estadoJogo.pontos);
         this.kill();
     }

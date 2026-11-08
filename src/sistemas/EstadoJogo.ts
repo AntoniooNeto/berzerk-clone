@@ -6,6 +6,7 @@ export class EstadoJogo {
   vidasAntes = VIDAS_INICIAIS;
   fimDeJogo = false;
   sala = 1;
+  robosRestantes = 0;
 
   adicionarPontos(quantidade: number) {
     this.pontos += quantidade;

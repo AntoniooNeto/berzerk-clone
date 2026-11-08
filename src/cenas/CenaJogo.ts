@@ -5,7 +5,7 @@ import { Robo } from '../atores/Robo';
 import { gerarSala, sortearPosicoes, type Sala } from '../sistemas/GeradorSala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 import { dificuldadeDaSala, type Dificuldade } from '../sistemas/Dificuldade';
-import { Placar, Vidas, NumeroSala } from '../atores/Hud';
+import { Placar, Vidas, NumeroSala, MensagemBonus } from '../atores/Hud';
 import {
   LARGURA_JOGO as L,
   ALTURA_JOGO as A,
@@ -15,12 +15,15 @@ import {
   X0_JOGADOR,
   Y0_JOGADOR,
   type TipoRobo,
+  BONUS_SALA_LIMPA,
 } from '../config';
 
 export const jogador = new Jogador(X0_JOGADOR, Y0_JOGADOR, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
 type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita'
 
 export class CenaJogo extends Scene {
+  private salaLimpa = false;
+
   onInitialize() {
     this.add(jogador);
     this.add(new Placar());
@@ -31,6 +34,7 @@ export class CenaJogo extends Scene {
 
   onPostUpdate() {
     this.verificarSaida();
+    this.verificarSalaLimpa();
   }
 
   onPreUpdate(_engine: Engine, _elapsed: number): void {
@@ -38,6 +42,15 @@ export class CenaJogo extends Scene {
       jogador.reposicionarNaSala();
       estadoJogo.vidasAntes = estadoJogo.vidas;
     }
+  }
+
+  private verificarSalaLimpa() {
+    if (this.salaLimpa || estadoJogo.robosRestantes > 0) return;
+
+    this.salaLimpa = true;
+    estadoJogo.adicionarPontos(BONUS_SALA_LIMPA);
+    this.add(new MensagemBonus(`SALA LIMPA! +${BONUS_SALA_LIMPA}`));
+    console.log('Sala Limpa! Bonus:', BONUS_SALA_LIMPA);
   }
 
   // Jogador passou da borda da tela = saiu por uma porta
@@ -63,6 +76,9 @@ export class CenaJogo extends Scene {
     const dificuldade = dificuldadeDaSala(estadoJogo.sala);
     const posicoes = sortearPosicoes(sala, dificuldade.quantidadeRobos);
     this.spawnarRobos(posicoes, dificuldade);
+
+    estadoJogo.robosRestantes = posicoes.length;
+    this.salaLimpa = false;
   }
 
   // Remove paredes, robôs, tiros etc., menos o jogador e os textos do HUD
