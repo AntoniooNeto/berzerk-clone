@@ -58,7 +58,19 @@ export const TIPOS_ROBO: Record<TipoRobo, DadosRobo> = {
   rapido: {cor: CORES.robo2, velocidade: 55, recargaTiro: 4000, pontos: 100},
 };
 
-export const CHANCE_ROBO_RAPIDO = 0.3;
+export const DIFICULDADE = {
+  robosBase: 2,
+  salasPorRoboExtra: 2,
+  robosMaximo: 8,
+  velocidadePorSala: 0.04,
+  velocidadeMaxima: 1.3,
+  recargaPorSala: 0.05,
+  recargaMinima: 0.5,
+  chanceRapidoInicial: 0.1,
+  chanceRapidoPorSala: 0.05,
+  chanceRapidoMaxima: 0.6,
+}
+
 // ---------- Grupos de colisão ----------
 // ATENÇÃO: criar sempre nesta ordem. Cada grupo recebe um bit na ordem
 // de criação (jogador = 1, inimigo = 2, parede = 4, ...), e a máscara usa esses bits.

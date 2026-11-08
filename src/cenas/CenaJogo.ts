@@ -4,6 +4,7 @@ import { Jogador } from '../atores/Jogador';
 import { Robo } from '../atores/Robo';
 import { gerarSala, sortearPosicoes, type Sala } from '../sistemas/GeradorSala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
+import { dificuldadeDaSala, type Dificuldade } from '../sistemas/Dificuldade';
 import { Placar, Vidas, NumeroSala } from '../atores/Hud';
 import {
   LARGURA_JOGO as L,
@@ -13,7 +14,6 @@ import {
   TAMANHO_JOGADOR,
   X0_JOGADOR,
   Y0_JOGADOR,
-  CHANCE_ROBO_RAPIDO,
   type TipoRobo,
 } from '../config';
 
@@ -60,8 +60,9 @@ export class CenaJogo extends Scene {
     const sala = gerarSala();
     this.montarSala(sala);
 
-    const quantidade = 3 + Math.floor(Math.random() * 3); // 3 a 5 robôs
-    this.spawnarRobos(sortearPosicoes(sala, quantidade));
+    const dificuldade = dificuldadeDaSala(estadoJogo.sala);
+    const posicoes = sortearPosicoes(sala, dificuldade.quantidadeRobos);
+    this.spawnarRobos(posicoes, dificuldade);
   }
 
   // Remove paredes, robôs, tiros etc., menos o jogador e os textos do HUD
@@ -82,10 +83,10 @@ export class CenaJogo extends Scene {
   }
 
 
-  private spawnarRobos(posicoes: { x: number; y: number }[]) {
+  private spawnarRobos(posicoes: { x: number; y: number }[], dificuldade: Dificuldade) {
   for (const posicao of posicoes) {
-    const tipo: TipoRobo = Math.random() < CHANCE_ROBO_RAPIDO ? 'rapido' : 'comum';
-    this.add(new Robo(posicao.x, posicao.y, jogador, tipo));
+    const tipo: TipoRobo = Math.random() < dificuldade.chanceRapido ? 'rapido' : 'comum';
+    this.add(new Robo(posicao.x, posicao.y, jogador, tipo, dificuldade));
   }
 }
 
