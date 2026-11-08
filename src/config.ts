@@ -11,6 +11,8 @@ export const PONTOS_ROBO = 50;
 export const PONTOS_MORTE = 50;
 export const X0_JOGADOR = LARGURA_JOGO/10;
 export const Y0_JOGADOR = ALTURA_JOGO/2;
+export const TEMPO_TIRO = 80;
+export const TEMPO_MORTE = 80;
 
 // ---------- Sala ----------
 export const ESPESSURA_PAREDE = TAMANHO_TILE;
@@ -19,6 +21,7 @@ export const ESPESSURA_PAREDE_INTERNA = 6;
 export const TAMANHO_PORTA = TAMANHO_TILE * 2; // largura das aberturas
 
 // ---------- Tamanhos das entidades ----------
+export const TAMANHO_SPRITE = 32;
 export const TAMANHO_JOGADOR = 12;
 export const TAMANHO_ROBO = 12;
 export const TAMANHO_BALA = 4;
@@ -27,8 +30,8 @@ export const RECARGA_BALA = 500;
 export const RECARGA_TIRO_ROBO = 2500;
 
 // ---------- Velocidades (pixels por segundo) ----------
-export const VELOCIDADE_JOGADOR = 80;
-export const VELOCIDADE_ROBO = 30;
+export const VELOCIDADE_JOGADOR = 50;
+export const VELOCIDADE_ROBO = 10;
 export const VELOCIDADE_BALA = 200;
 export const VELOCIDADE_BALA_ROBO = 120;
 
