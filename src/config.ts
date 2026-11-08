@@ -14,6 +14,8 @@ export const Y0_JOGADOR = ALTURA_JOGO/2;
 
 // ---------- Sala ----------
 export const ESPESSURA_PAREDE = TAMANHO_TILE;
+export const ESPESSURA_PAREDE_INTERNA = 6;
+
 export const TAMANHO_PORTA = TAMANHO_TILE * 2; // largura das aberturas
 
 // ---------- Tamanhos das entidades ----------
@@ -40,6 +42,7 @@ export const CORES = {
   parede: Color.Gray,
   otto: Color.Magenta,
   fundo: Color.fromHex('#111111'),
+    paredeInterna: Color.fromHex('#000000'),
   hud: Color.Black,    // texto sobre a parede cinza
   texto: Color.White,  // texto sobre o fundo escuro
 };
