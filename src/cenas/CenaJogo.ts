@@ -4,7 +4,8 @@ import { Jogador } from '../atores/Jogador';
 import { Robo } from '../atores/Robo';
 import { gerarSala, sortearPosicoes, type Sala } from '../sistemas/GeradorSala';
 import { estadoJogo } from '../sistemas/EstadoJogo';
-import { Placar, Vidas, NumeroSala } from '../atores/Hud';
+import { dificuldadeDaSala, type Dificuldade } from '../sistemas/Dificuldade';
+import { Placar, Vidas, NumeroSala, MensagemBonus } from '../atores/Hud';
 import {
   LARGURA_JOGO as L,
   ALTURA_JOGO as A,
@@ -13,12 +14,16 @@ import {
   TAMANHO_JOGADOR,
   X0_JOGADOR,
   Y0_JOGADOR,
+  type TipoRobo,
+  BONUS_SALA_LIMPA,
 } from '../config';
 
 export const jogador = new Jogador(X0_JOGADOR, Y0_JOGADOR, TAMANHO_JOGADOR, TAMANHO_JOGADOR);
 type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita'
 
 export class CenaJogo extends Scene {
+  private salaLimpa = false;
+
   onInitialize() {
     this.add(jogador);
     jogador.reposicionarNaSala();
@@ -30,6 +35,7 @@ export class CenaJogo extends Scene {
 
   onPostUpdate() {
     this.verificarSaida();
+    this.verificarSalaLimpa();
   }
 
   onPreUpdate(_engine: Engine, _elapsed: number): void {
@@ -37,6 +43,15 @@ export class CenaJogo extends Scene {
       jogador.reposicionarNaSala();
       estadoJogo.vidasAntes = estadoJogo.vidas;
     }
+  }
+
+  private verificarSalaLimpa() {
+    if (this.salaLimpa || estadoJogo.robosRestantes > 0) return;
+
+    this.salaLimpa = true;
+    estadoJogo.adicionarPontos(BONUS_SALA_LIMPA);
+    this.add(new MensagemBonus(`SALA LIMPA! +${BONUS_SALA_LIMPA}`));
+    console.log('Sala Limpa! Bonus:', BONUS_SALA_LIMPA);
   }
 
   // Jogador passou da borda da tela = saiu por uma porta
@@ -59,8 +74,12 @@ export class CenaJogo extends Scene {
     const sala = gerarSala();
     this.montarSala(sala);
 
-    const quantidade = 3 + Math.floor(Math.random() * 3); // 3 a 5 robôs
-    this.spawnarRobos(sortearPosicoes(sala, quantidade));
+    const dificuldade = dificuldadeDaSala(estadoJogo.sala);
+    const posicoes = sortearPosicoes(sala, dificuldade.quantidadeRobos);
+    this.spawnarRobos(posicoes, dificuldade);
+
+    estadoJogo.robosRestantes = posicoes.length;
+    this.salaLimpa = false;
   }
 
   // Remove paredes, robôs, tiros etc., menos o jogador e os textos do HUD
@@ -81,9 +100,10 @@ export class CenaJogo extends Scene {
   }
 
 
-  private spawnarRobos(posicoes: { x: number; y: number }[]) {
+  private spawnarRobos(posicoes: { x: number; y: number }[], dificuldade: Dificuldade) {
   for (const posicao of posicoes) {
-    this.add(new Robo(posicao.x, posicao.y, jogador));
+    const tipo: TipoRobo = Math.random() < dificuldade.chanceRapido ? 'rapido' : 'comum';
+    this.add(new Robo(posicao.x, posicao.y, jogador, tipo, dificuldade));
   }
 }
 

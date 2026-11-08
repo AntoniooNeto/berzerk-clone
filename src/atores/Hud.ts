@@ -1,5 +1,5 @@
-import { Color, Engine, Font, Label, vec } from 'excalibur';
-import { CORES, ALTURA_JOGO, ESPESSURA_PAREDE, TAMANHO_TILE } from '../config';
+import { Color, Engine, Font, Label, TextAlign, vec } from 'excalibur';
+import { CORES, LARGURA_JOGO, ALTURA_JOGO, ESPESSURA_PAREDE, TAMANHO_TILE } from '../config';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
 function criarFonte(cor: Color) {
@@ -57,5 +57,25 @@ export class NumeroSala extends Label {
 
   onPreUpdate() {
     this.text = `SALA: ${estadoJogo.sala}`;
+  }
+}
+
+export class MensagemBonus extends Label {
+  constructor(texto: string) {
+    super({
+      text: texto,
+      pos: vec(LARGURA_JOGO / 2, ALTURA_JOGO / 2),
+      anchor: vec(0.5, 0.5),
+      font: new Font({
+        family: 'monospace',
+        size: 14,
+        color: CORES.bonus,
+        quality: 4,
+        textAlign: TextAlign.Center,
+      }),
+      z: 10,
+    });
+
+    this.actions.delay(2000).die();
   }
 }
