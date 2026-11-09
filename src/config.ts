@@ -1,0 +1,110 @@
+import { CollisionGroupManager, Color } from 'excalibur';
+
+// ---------- Tela e grade ----------
+export const LARGURA_JOGO = 320;
+export const ALTURA_JOGO = 240;
+export const TAMANHO_TILE = 16;
+
+// ---------- Regras ----------
+export const VIDAS_INICIAIS = 3;
+export const PONTOS_ROBO = 50;
+export const PONTOS_MORTE = 50;
+export const BONUS_SALA_LIMPA = 100;
+export const X0_JOGADOR = LARGURA_JOGO/10;
+export const Y0_JOGADOR = ALTURA_JOGO/2;
+export const TEMPO_TIRO = 80;
+export const TEMPO_MORTE = 80;
+
+// ---------- Transição de sala ----------
+export const ESPESSURA_PORTA = 4;   
+export const DURACAO_FADE = 400;    
+
+// ---------- Sala ----------
+export const ESPESSURA_PAREDE = TAMANHO_TILE;
+export const ESPESSURA_PAREDE_INTERNA = TAMANHO_TILE;
+export const TAMANHO_PORTA = TAMANHO_TILE * 3 ; // largura das aberturas
+
+// -------- Sprite sala -----------
+// Tamanho da imagem Tileset.png em tiles: largura / 16 e altura / 16
+export const TILESET_COLUNAS = 19;
+export const TILESET_LINHAS = 16;
+export const TILES = {
+    chao: { col: 1, linha: 1},
+    parede: { col: 2, linha: 2 },
+};
+
+// ---------- Tamanhos das entidades ----------
+export const TAMANHO_SPRITE = 32;
+export const TAMANHO_JOGADOR = 12;
+export const TAMANHO_ROBO = 12;
+export const TAMANHO_BALA = 4;
+export const DISTANCIA_BALA = 6;
+export const RECARGA_BALA = 500;
+export const RECARGA_TIRO_ROBO = 2500;
+
+// ---------- Velocidades (pixels por segundo) ----------
+export const VELOCIDADE_JOGADOR = 50;
+export const VELOCIDADE_ROBO = 10;
+export const VELOCIDADE_BALA = 200;
+export const VELOCIDADE_BALA_ROBO = 120;
+
+// ---------- Cores do protótipo ----------
+export const CORES = {
+  jogador: Color.Green,
+  robo: Color.Red,
+  robo2: Color.Orange,
+  balaJogador: Color.White,
+  balaInimigo: Color.Yellow,
+  parede: Color.Gray,
+  otto: Color.Magenta,
+  bonus: Color.Yellow,
+  fundo: Color.fromHex('#000000'),
+  porta: Color.fromHex('#00e5ff'),
+  paredeInterna: Color.fromHex('#000000'),
+  hud: Color.Black,    // texto sobre a parede cinza
+  texto: Color.White,  // texto sobre o fundo escuro
+};
+
+export type TipoRobo = 'comum' | 'rapido';
+
+export interface DadosRobo {
+  cor: Color;
+  velocidade: number;
+  recargaTiro: number;
+  pontos: number;
+}
+
+export const TIPOS_ROBO: Record<TipoRobo, DadosRobo> = {
+  comum: {cor: CORES.robo, velocidade: VELOCIDADE_ROBO, recargaTiro: RECARGA_TIRO_ROBO, pontos: PONTOS_ROBO},
+  rapido: {cor: CORES.robo2, velocidade: 55, recargaTiro: 4000, pontos: 100},
+};
+
+export const DIFICULDADE = {
+  robosBase: 2,
+  salasPorRoboExtra: 2,
+  robosMaximo: 8,
+  velocidadePorSala: 0.04,
+  velocidadeMaxima: 1.3,
+  recargaPorSala: 0.05,
+  recargaMinima: 0.5,
+  chanceRapidoInicial: 0.1,
+  chanceRapidoPorSala: 0.05,
+  chanceRapidoMaxima: 0.6,
+}
+
+// ---------- Grupos de colisão ----------
+// ATENÇÃO: criar sempre nesta ordem. Cada grupo recebe um bit na ordem
+// de criação (jogador = 1, inimigo = 2, parede = 4, ...), e a máscara usa esses bits.
+const JOGADOR = 0b00001;
+const INIMIGO = 0b00010;
+const PAREDE = 0b00100;
+const BALA_JOGADOR = 0b01000;
+const BALA_INIMIGO = 0b10000;
+
+export const GruposDeColisao = {
+  Jogador: CollisionGroupManager.create('jogador', INIMIGO | PAREDE | BALA_INIMIGO),
+  Inimigo: CollisionGroupManager.create('inimigo', JOGADOR | PAREDE | BALA_JOGADOR | INIMIGO),
+  Parede: CollisionGroupManager.create('parede', JOGADOR | INIMIGO | BALA_JOGADOR | BALA_INIMIGO),
+  BalaJogador: CollisionGroupManager.create('balaJogador', INIMIGO | PAREDE),
+  BalaInimigo: CollisionGroupManager.create('balaInimigo', JOGADOR | PAREDE),
+};
