@@ -16,6 +16,7 @@ export class Jogador extends Actor {
     private tempoMorte = 0;
     private animAtirando!: Animation;
     private animMorrendo!: Animation;
+    bloqueado = false;
 
     constructor(x: number, y: number, largura: number, altura: number){
         super({
@@ -109,6 +110,11 @@ export class Jogador extends Actor {
                 
             }
         }
+        if (this.bloqueado && !this.morrendo) {
+            this.vel = vec(0, 0);
+            this.graphics.use('parado');
+        return;
+        } 
 
         //--------Movimento no eixo x---------
         let direcao_x = 0;  

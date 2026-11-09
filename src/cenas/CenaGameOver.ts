@@ -1,5 +1,4 @@
 import { Engine, Font, Keys, Label, Scene, TextAlign, vec } from 'excalibur';
-// ...
 import { ALTURA_JOGO, CORES, LARGURA_JOGO } from '../config';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 import { CenaJogo } from './CenaJogo';

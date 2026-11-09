@@ -15,11 +15,23 @@ export const Y0_JOGADOR = ALTURA_JOGO/2;
 export const TEMPO_TIRO = 80;
 export const TEMPO_MORTE = 80;
 
+// ---------- Transição de sala ----------
+export const ESPESSURA_PORTA = 4;   
+export const DURACAO_FADE = 400;    
+
 // ---------- Sala ----------
 export const ESPESSURA_PAREDE = TAMANHO_TILE;
-export const ESPESSURA_PAREDE_INTERNA = 6;
+export const ESPESSURA_PAREDE_INTERNA = TAMANHO_TILE;
+export const TAMANHO_PORTA = TAMANHO_TILE * 3 ; // largura das aberturas
 
-export const TAMANHO_PORTA = TAMANHO_TILE * 2; // largura das aberturas
+// -------- Sprite sala -----------
+// Tamanho da imagem Tileset.png em tiles: largura / 16 e altura / 16
+export const TILESET_COLUNAS = 19;
+export const TILESET_LINHAS = 16;
+export const TILES = {
+    chao: { col: 1, linha: 1},
+    parede: { col: 2, linha: 2 },
+};
 
 // ---------- Tamanhos das entidades ----------
 export const TAMANHO_SPRITE = 32;
@@ -46,8 +58,9 @@ export const CORES = {
   parede: Color.Gray,
   otto: Color.Magenta,
   bonus: Color.Yellow,
-  fundo: Color.fromHex('#111111'),
-    paredeInterna: Color.fromHex('#000000'),
+  fundo: Color.fromHex('#000000'),
+  porta: Color.fromHex('#00e5ff'),
+  paredeInterna: Color.fromHex('#000000'),
   hud: Color.Black,    // texto sobre a parede cinza
   texto: Color.White,  // texto sobre o fundo escuro
 };

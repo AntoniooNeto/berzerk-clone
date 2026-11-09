@@ -14,7 +14,7 @@ const jogo = new Engine({
   backgroundColor: CORES.fundo,
 });
 
-const loader = new Loader([Recursos.Arqueiro, Recursos.Rato, Recursos.Mago]);
+const loader = new Loader([Recursos.Arqueiro, Recursos.Rato, Recursos.Mago, Recursos.Parede]);
 
 jogo.addScene('jogo', new CenaJogo());
 jogo.addScene('gameover', new CenaGameOver());

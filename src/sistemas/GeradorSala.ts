@@ -1,9 +1,4 @@
-import {
-  ALTURA_JOGO,
-  ESPESSURA_PAREDE,
-  ESPESSURA_PAREDE_INTERNA,
-  LARGURA_JOGO,
-} from '../config';
+import { TAMANHO_TILE as T } from '../config';
 
 export interface RetanguloParede {
   x: number;
@@ -27,17 +22,31 @@ interface Celula {
   l: number; // linha
 }
 
-// ---------- Ajustes do labirinto ----------
-const COLUNAS = 5; // use número ÍMPAR: a porta fica na célula do meio
-const LINHAS = 3;  // use número ÍMPAR
-const CHANCE_ABRIR_EXTRA = 0.35; // maior = sala mais aberta, menor = mais fechada
+// ---------- Grade do labirinto (medidas em TILES) ----------
+// Sala de 20 x 15 tiles; sem a parede externa sobram 18 x 13.
+// Largura: 3+3+2+3+3 = 14 de células + 4 tiles de parede entre elas = 18
+// Altura:  4+3+4     = 11 de células + 2 tiles de parede entre elas = 13
+// Se o tamanho da sala mudar, estas duas listas precisam ser refeitas.
+const LARGURAS_CELULA = [3, 2, 4, 2, 3];
+const ALTURAS_CELULA = [3, 5, 3];
+const COLUNAS = LARGURAS_CELULA.length;
+const LINHAS = ALTURAS_CELULA.length;
 
-// Área jogável (dentro das paredes externas)
-const X0 = ESPESSURA_PAREDE;
-const Y0 = ESPESSURA_PAREDE;
-const LARGURA_CELULA = (LARGURA_JOGO - 2 * ESPESSURA_PAREDE) / COLUNAS;
-const ALTURA_CELULA = (ALTURA_JOGO - 2 * ESPESSURA_PAREDE) / LINHAS;
-const MINIMO_PAREDES = 5; // nunca deixa a sala com menos paredes internas que isso
+const CHANCE_ABRIR_EXTRA = 0.35; // maior = sala mais aberta, menor = mais fechada
+const MINIMO_PAREDES = 5;        // nunca deixa a sala com menos paredes internas que isso
+
+// Tile onde cada célula começa (o tile 0 é a parede externa)
+function inicios(tamanhos: number[]) {
+  const lista: number[] = [];
+  let t = 1;
+  for (const n of tamanhos) {
+    lista.push(t);
+    t += n + 1; // +1 = o tile de parede entre as células
+  }
+  return lista;
+}
+const COLUNA_INICIO = inicios(LARGURAS_CELULA); // [1, 5, 9, 12, 16]
+const LINHA_INICIO = inicios(ALTURAS_CELULA);   // [1, 6, 10]
 
 function inteiro(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -64,7 +73,6 @@ function vizinhasDe({ c, l }: Celula): Celula[] {
     { c, l: l - 1 },
   ].filter((v) => v.c >= 0 && v.c < COLUNAS && v.l >= 0 && v.l < LINHAS);
 }
-
 
 export function gerarSala(): Sala {
   // paredeV[l][c] = parede entre a célula (c, l) e a (c + 1, l)
@@ -94,7 +102,8 @@ export function gerarSala(): Sala {
     derrubar(atual, proxima);
     visitada[proxima.l][proxima.c] = true;
     pilha.push(proxima);
-  } 
+  }
+
   // 2) Derruba algumas paredes extras, para criar voltas,
   //    mas nunca deixa menos que MINIMO_PAREDES
   const fechadas: { vertical: boolean; l: number; c: number }[] = [];
@@ -111,42 +120,44 @@ export function gerarSala(): Sala {
 
   let restantes = fechadas.length;
   for (const p of embaralhar(fechadas)) {
-    if (restantes <= MINIMO_PAREDES) break; // chegou no mínimo: para de derrubar
+    if (restantes <= MINIMO_PAREDES) break;
     if (Math.random() >= CHANCE_ABRIR_EXTRA) continue;
     if (p.vertical) paredeV[p.l][p.c] = false;
     else paredeH[p.l][p.c] = false;
     restantes--;
   }
 
-  // 3) Transforma as paredes que sobraram em retângulos
-  const meio = ESPESSURA_PAREDE_INTERNA / 2;
+  // 3) Transforma as paredes que sobraram em retângulos, sempre em tiles inteiros
   const paredes: RetanguloParede[] = [];
+  const bloco = (col: number, linha: number, larguraTiles: number, alturaTiles: number) =>
+    paredes.push({ x: col * T, y: linha * T, largura: larguraTiles * T, altura: alturaTiles * T });
 
+  // Verticais: ocupam o tile logo à direita da célula c, na altura da célula
   for (let l = 0; l < LINHAS; l++) {
     for (let c = 0; c < COLUNAS - 1; c++) {
-      if (!paredeV[l][c]) continue;
-      const x = X0 + (c + 1) * LARGURA_CELULA;
-      const y = Y0 + l * ALTURA_CELULA;
-      paredes.push({
-        x: Math.round(x - meio),
-        y: Math.round(y - meio),
-        largura: ESPESSURA_PAREDE_INTERNA,
-        altura: Math.round(ALTURA_CELULA + ESPESSURA_PAREDE_INTERNA),
-      });
+      if (paredeV[l][c]) {
+        bloco(COLUNA_INICIO[c] + LARGURAS_CELULA[c], LINHA_INICIO[l], 1, ALTURAS_CELULA[l]);
+      }
     }
   }
 
+  // Horizontais: ocupam o tile logo abaixo da célula l, na largura da célula
   for (let l = 0; l < LINHAS - 1; l++) {
     for (let c = 0; c < COLUNAS; c++) {
-      if (!paredeH[l][c]) continue;
-      const x = X0 + c * LARGURA_CELULA;
-      const y = Y0 + (l + 1) * ALTURA_CELULA;
-      paredes.push({
-        x: Math.round(x - meio),
-        y: Math.round(y - meio),
-        largura: Math.round(LARGURA_CELULA + ESPESSURA_PAREDE_INTERNA),
-        altura: ESPESSURA_PAREDE_INTERNA,
-      });
+      if (paredeH[l][c]) {
+        bloco(COLUNA_INICIO[c], LINHA_INICIO[l] + ALTURAS_CELULA[l], LARGURAS_CELULA[c], 1);
+      }
+    }
+  }
+
+  // Pilares nos cruzamentos: só aparecem se alguma parede encosta neles,
+  // assim as paredes sempre se emendam sem deixar buraco
+  for (let j = 0; j < LINHAS - 1; j++) {
+    for (let i = 0; i < COLUNAS - 1; i++) {
+      const encosta = paredeV[j][i] || paredeV[j + 1][i] || paredeH[j][i] || paredeH[j][i + 1];
+      if (encosta) {
+        bloco(COLUNA_INICIO[i] + LARGURAS_CELULA[i], LINHA_INICIO[j] + ALTURAS_CELULA[j], 1, 1);
+      }
     }
   }
 
@@ -158,7 +169,7 @@ export function gerarSala(): Sala {
     { c: meioC, l: LINHAS - 1 },
     { c: 0, l: meioL },
     { c: COLUNAS - 1, l: meioL },
-    { c: meioC, l: meioL }, // onde o jogador nasce na primeira sala
+    { c: meioC, l: meioL },
   ];
 
   const posicoesLivres: Posicao[] = [];
@@ -166,20 +177,16 @@ export function gerarSala(): Sala {
     for (let c = 0; c < COLUNAS; c++) {
       if (reservadas.some((r) => r.c === c && r.l === l)) continue;
       posicoesLivres.push({
-        x: X0 + (c + 0.5) * LARGURA_CELULA,
-        y: Y0 + (l + 0.5) * ALTURA_CELULA,
+        x: (COLUNA_INICIO[c] + LARGURAS_CELULA[c] / 2) * T,
+        y: (LINHA_INICIO[l] + ALTURAS_CELULA[l] / 2) * T,
       });
     }
   }
 
   return { paredes, posicoesLivres };
 }
+
 // Sorteia 'quantidade' posições diferentes
 export function sortearPosicoes(sala: Sala, quantidade: number): Posicao[] {
-  const copia = [...sala.posicoesLivres];
-  for (let i = copia.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copia[i], copia[j]] = [copia[j], copia[i]];
-  }
-  return copia.slice(0, quantidade);
+  return embaralhar(sala.posicoesLivres).slice(0, quantidade);
 }

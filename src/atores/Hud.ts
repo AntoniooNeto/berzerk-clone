@@ -2,9 +2,16 @@ import { Color, Engine, Font, Label, TextAlign, vec } from 'excalibur';
 import { CORES, LARGURA_JOGO, ALTURA_JOGO, ESPESSURA_PAREDE, TAMANHO_TILE } from '../config';
 import { estadoJogo } from '../sistemas/EstadoJogo';
 
+
+
 function criarFonte(cor: Color) {
     
-  return new Font({ family: 'monospace', size: 10, color: cor, quality: 4});
+  return new Font({
+    family: "'Press Start 2P', monospacee", 
+    size: 10, 
+    color: cor, 
+    quality: 4
+  });
 }
 
 export class Placar extends Label {
@@ -27,7 +34,7 @@ export class Vidas extends Label {
   constructor() {
     super({
       text: 'VIDAS: 3',
-      pos: vec(240, 3),
+      pos: vec(220, 3),
       anchor: vec(0, 0),
       font: criarFonte(CORES.hud),
       z: 10,

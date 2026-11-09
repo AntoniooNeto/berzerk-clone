@@ -13,6 +13,7 @@ export class Robo extends Actor {
     private recarga: number;
     private morrendo = false;
     private tempoMorte = 0;
+    private tipo: TipoRobo;
     private cooldown = 1000 + Math.random() * 2000;
 
     constructor(x: number, y: number, alvo: Actor, tipo: TipoRobo, dificuldade: Dificuldade) {
@@ -25,6 +26,7 @@ export class Robo extends Actor {
             collisionType: CollisionType.Active,
             collisionGroup: GruposDeColisao.Inimigo,
         });
+        this.tipo = tipo;
         this.alvo = alvo;
         this.dados = TIPOS_ROBO[tipo];
         this.velocidade = this.dados.velocidade * dificuldade.multiplicadorVelocidade;
@@ -34,8 +36,11 @@ export class Robo extends Actor {
         //=================Sprite e animacoes==================
     onInitialize(_engine: Engine): void {
 
+        const imagem = this.tipo === 'rapido' ? Recursos.Rato : Recursos.Mago;
+
+
         const folha = SpriteSheet.fromImageSource({
-            image: Recursos.Mago,
+            image: imagem,
             grid: { rows: 15, columns: 8, spriteWidth: TAMANHO_SPRITE, spriteHeight: TAMANHO_SPRITE },
         });
 
@@ -116,7 +121,12 @@ export class Robo extends Actor {
         }
 
          // Vira o sprite para o lado em que está andando
-        if (this.vel.x !== 0) this.graphics.flipHorizontal = this.vel.x < 0;
+        if (this.vel.x !== 0) {
+            const indoParaEsquerda = this.vel.x < 0;
+            // o mago é desenhado olhando para a direita, o rato olhando para a esquerda
+            const desenhoOlhaEsquerda = this.tipo === 'rapido';
+            this.graphics.flipHorizontal = indoParaEsquerda !== desenhoOlhaEsquerda;
+        }
     }
     
 
